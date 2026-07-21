@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday Tanushree! ✨</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Dancing+Script:wght@700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    /* ==========================================
+       1. ULTRA LUXURY PASTEL & GOLD THEME
+       ========================================== */
+    :root {
+      --bg-dark: #0b0314;
+      --gold-grad: linear-gradient(135deg, #ffe259 0%, #ffa751 100%);
+      --pink-grad: linear-gradient(135deg, #ff75c3 0%, #9b51e0 100%);
+      --glow-color: rgba(255, 117, 195, 0.4);
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.15);
+      --glass-blur: blur(20px);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: #ffffff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Animated Canvas Background */
+    #bgCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Ambient Lighting Orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      z-index: 0;
+      opacity: 0.5;
+      animation: floatOrb 10s ease-in-out infinite alternate;
+    }
+    .orb-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: #ff1493; }
+    .orb-2 { bottom: -10%; right: -10%; width: 50vw; height: 50vw; background: #8a2be2; }
+
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(30px, 50px) scale(1.1); }
+    }
+
+    /* Modern Glass Container */
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-radius: 32px;
+      padding: 40px 25px;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      text-align: center;
+      max-width: 450px;
+      width: 90%;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Typography */
+    .gold-title {
+      font-family: 'Cinzel', serif;
+      background: var(--gold-grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 2px;
+      font-weight: 700;
+    }
+
+    .cursive-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: 3.5rem;
+      background: linear-gradient(45deg, #ffa8e2, #ffd700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 10px 0;
+    }
+
+    /* Premium Glow Button */
+    .btn-premium {
+      background: var(--pink-grad);
+      border: none;
+      color: white;
+      padding: 16px 36px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 10px 30px var(--glow-color);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      margin-top: 25px;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-premium:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 15px 35px rgba(255, 117, 195, 0.6);
+    }
+
+    .btn-premium:active {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    /* Section Handling */
+    section {
+      display: none;
+      min-height: 100vh;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      position: relative;
+      z-index: 2;
+    }
+
+    section.active {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Audio Player Pill */
+    .music-pill {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 8px 18px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+
+    /* 3D Photo Flip Cards */
+    .card-3d-container {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 25px;
+      perspective: 1000px;
+    }
+
+    .card-3d {
+      width: 120px;
+      height: 160px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 15px 25px rgba(0,0,0,0.5);
+      border: 2px solid rgba(255,255,255,0.2);
+      transition: transform 0.5s ease;
+      cursor: pointer;
+    }
+
+    .card-3d:hover {
+      transform: translateY(-10px) rotateY(10deg);
+    }
+
+    .card-3d img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Interactive Gift Box */
+    .gift-box {
+      font-size: 5rem;
+      cursor: pointer;
+      margin: 20px 0;
+      animation: pulse 1.5s infinite alternate;
+      display: inline-block;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.1); }
+    }
+
+    /* Cake Flame Styling */
+    .flame {
+      width: 15px;
+      height: 22px;
+      background: radial-gradient(#fff, #ffd700, #ff4500);
+      border-radius: 50% 50% 20% 20%;
+      margin: 0 auto;
+      box-shadow: 0 0 20px #ffd700;
+      animation: flameFlicker 0.1s infinite alternate;
+    }
+
+    @keyframes flameFlicker {
+      0% { transform: scale(1) rotate(-1deg); }
+      100% { transform: scale(1.1) rotate(1deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="bgCanvas"></canvas>
+
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="music-pill" onclick="toggleMusic()">
+    <span id="musicIcon">🎵</span>
+    <span id="musicText">Play Vibe</span>
+    <audio id="bgMusic" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+  </div>
+
+  <section id="sec-welcome" class="active">
+    <div class="glass-card">
+      <h3 class="gold-title" style="font-size: 0.8rem; text-transform: uppercase;">A Royal Celebration</h3>
+      <h1 class="cursive-title">Hi Tanushree ✨</h1>
+      <p style="font-size: 0.95rem; color: #d1c4e9; line-height: 1.6; margin-top: 10px;">
+        An exclusive digital experience created just to make your special day unforgettable.
+      </p>
+      <button class="btn-premium" onclick="nextSection('sec-birthday')">Unfold Surprise ✨</button>
+    </div>
+  </section>
+
+  <section id="sec-birthday">
+    <div class="glass-card">
+      <h3 class="gold-title" style="font-size: 0.85rem;">IT'S YOUR DAY</h3>
+      <h1 class="cursive-title" style="font-size: 2.8rem;">Happy Birthday! 👑</h1>
+      <p style="font-size: 0.95rem; color: #e1bee7; margin-top: 10px; line-height: 1.6;">
+        May your life be filled with endless joy, glamour, and all the success you deserve.
+      </p>
+      <button class="btn-premium" onclick="nextSection('sec-letter')">Read Special Letter 💌</button>
+    </div>
+  </section>
+
+  <section id="sec-letter">
+    <div class="glass-card" style="text-align: left;">
+      <h2 class="cursive-title" style="font-size: 2.2rem; margin-bottom: 5px;">Dearest Tanushree,</h2>
+      <p style="font-size: 0.9rem; color: #e0e0e0; line-height: 1.8; font-weight: 300;">
+        Today is a reminder of how amazing you are. I wanted to build something unique and beautiful for you—something as glowing and wonderful as your personality.<br><br>
+        May this year open doors to brilliant opportunities, peaceful moments, and pure happiness. Keep shining effortlessly! ✨
+      </p>
+      <p style="text-align: right; margin-top: 20px; font-weight: 700; color: #ffa8e2; letter-spacing: 1px;">
+        — Best Wishes, Naitik
+      </p>
+      <div style="text-align: center; margin-top: 10px;">
+        <button class="btn-premium" onclick="nextSection('sec-gallery')">Explore Gallery 📸</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="sec-gallery">
+    <div class="glass-card" style="max-width: 500px;">
+      <h3 class="gold-title" style="font-size: 0.85rem;">MEMORIES & MOMENTS</h3>
+      <h2 style="font-size: 1.4rem; margin-top: 5px;">Capture The Glow ✨</h2>
+      
+      <div class="card-3d-container">
+        <div class="card-3d"><img src="https://picsum.photos/300/400?random=10" alt="Memory"></div>
+        <div class="card-3d"><img src="https://picsum.photos/300/400?random=20" alt="Memory"></div>
+        <div class="card-3d"><img src="https://picsum.photos/300/400?random=30" alt="Memory"></div>
+      </div>
+
+      <button class="btn-premium" onclick="nextSection('sec-surprise')">Unlock Gift Box 🎁</button>
+    </div>
+  </section>
+
+  <section id="sec-surprise">
+    <div class="glass-card">
+      <h3 class="gold-title" style="font-size: 0.85rem;">A LITTLE SURPRISE</h3>
+      <h2 style="font-size: 1.5rem; margin-top: 5px;">Tap To Open Your Gift!</h2>
+
+      <div id="giftBox" class="gift-box" onclick="openGift()">🎁</div>
+      <p id="giftMessage" style="font-size: 0.95rem; color: #ffd700; display: none; line-height: 1.6;">
+        "You deserve all the sweetness and happiness in the world!" 🌟💖
+      </p>
+
+      <button class="btn-premium" id="toCakeBtn" style="display: none;" onclick="nextSection('sec-cake')">Make A Wish 🎂</button>
+    </div>
+  </section>
+
+  <section id="sec-cake">
+    <div class="glass-card">
+      <h2 class="cursive-title" style="font-size: 2.5rem;">Make A Wish!</h2>
+      
+      <div style="margin: 30px 0;">
+        <div id="candleFlame" class="flame"></div>
+        <div style="width: 10px; height: 35px; background: #ffffff; margin: 0 auto; border-radius: 4px;"></div>
+        <div style="width: 140px; height: 70px; background: linear-gradient(to right, #ff80ab, #ff4081); margin: 0 auto; border-radius: 16px 16px 0 0; position: relative; box-shadow: 0 10px 20px rgba(0,0,0,0.3);">
+          <div style="position: absolute; top: 0; width: 100%; height: 15px; background: #fff; border-radius: 16px 16px 10px 10px; opacity: 0.8;"></div>
+        </div>
+      </div>
+
+      <button class="btn-premium" id="blowBtn" onclick="blowCandle()">Blow Candle 🌬️</button>
+      <button class="btn-premium" id="finalBtn" style="display: none;" onclick="nextSection('sec-final')">Final Surprise ✨</button>
+    </div>
+  </section>
+
+  <section id="sec-final">
+    <div class="glass-card">
+      <h1 class="cursive-title" style="font-size: 3rem;">Happy Birthday!</h1>
+      <h3 class="gold-title" style="font-size: 1.1rem; margin-bottom: 15px;">TANUSHREE</h3>
+      <p style="font-size: 0.9rem; color: #e0e0e0; line-height: 1.6; font-weight: 300;">
+        Hope this surprise brightened your day as much as you brighten the lives of people around you.
+      </p>
+      <hr style="border: 0; height: 1px; background: var(--glass-border); margin: 25px 0;">
+      <p style="font-size: 0.8rem; letter-spacing: 2px; color: #ffa8e2; text-transform: uppercase;">
+        Crafted with ❤️ by <strong>Naitik</strong>
+      </p>
+    </div>
+  </section>
+
+  <script>
+    // 1. Dynamic Interactive Particle Background
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedX = Math.random() * 0.5 - 0.25;
+        this.speedY = Math.random() * 0.5 - 0.25;
+        this.color = `rgba(255, ${Math.floor(Math.random() * 100 + 155)}, 220, ${Math.random() * 0.6 + 0.2})`;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < 70; i++) particles.push(new Particle());
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // 2. Navigation Control
+    function nextSection(id) {
+      document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+      const target = document.getElementById(id);
+      target.classList.add('active');
+
+      if (id === 'sec-birthday') triggerConfetti();
+    }
+
+    // 3. Audio Player
+    const music = document.getElementById('bgMusic');
+    let playing = false;
+    function toggleMusic() {
+      if (playing) {
+        music.pause();
+        document.getElementById('musicIcon').innerText = '🎵';
+        document.getElementById('musicText').innerText = 'Play Vibe';
+      } else {
+        music.play();
+        document.getElementById('musicIcon').innerText = '⏸️';
+        document.getElementById('musicText').innerText = 'Pause Vibe';
+      }
+      playing = !playing;
+    }
+
+    // 4. Confetti Effect
+    function triggerConfetti() {
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
+      }
+    }
+
+    // 5. Interactive Gift Box
+    function openGift() {
+      const box = document.getElementById('giftBox');
+      box.innerText = '💖';
+      box.style.animation = 'none';
+      document.getElementById('giftMessage').style.display = 'block';
+      document.getElementById('toCakeBtn').style.display = 'inline-block';
+      triggerConfetti();
+    }
+
+    // 6. Blow Candle
+    function blowCandle() {
+      document.getElementById('candleFlame').style.display = 'none';
+      document.getElementById('blowBtn').style.display = 'none';
+      document.getElementById('finalBtn').style.display = 'inline-block';
+      triggerConfetti();
+    }
+  </script>
+</body>
+</html>
