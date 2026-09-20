@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What I Was Looking For - Aesthetic Reel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Playfair+Display:ital,wght@1,600;1,800&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8cdda;
+            --pink-accent: #ff2a70;
+            --pink-glow: rgba(255, 42, 112, 0.4);
+            --text-stroke: #ff1e62;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            background-color: #0d0d11;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow: hidden;
+        }
+
+        /* 9:16 Reel Container */
+        .reel-canvas {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            max-width: 420px;
+            max-height: 880px;
+            background: radial-gradient(circle at center, #ffdbe6 0%, #f7abc1 60%, #e288a2 100%);
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Subtle overlay texture/glow */
+        .glow-overlay {
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 60%);
+            animation: pulseGlow 4s infinite alternate ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1.2); opacity: 0.9; }
+        }
+
+        /* Start Button */
+        #startBtn {
+            position: absolute;
+            z-index: 100;
+            padding: 16px 36px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(255, 65, 108, 0.5);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #startBtn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(255, 65, 108, 0.7);
+        }
+
+        /* Typography */
+        .lyric-box {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.7) translateY(20px);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .bubbly-text {
+            font-family: 'Fredoka', cursive;
+            font-size: 3.2rem;
+            color: #ffffff;
+            -webkit-text-stroke: 2px var(--text-stroke);
+            text-shadow: 
+                0 8px 0px var(--text-stroke),
+                0 15px 20px rgba(255, 30, 98, 0.3);
+            letter-spacing: -1px;
+            line-height: 1.1;
+        }
+
+        .looking-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .eye-graphic {
+            width: 90px;
+            height: 90px;
+            background: white;
+            border-radius: 50%;
+            border: 4px solid var(--pink-accent);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 8px 0 var(--text-stroke);
+            margin: 5px 0;
+        }
+
+        .eye-graphic svg {
+            width: 50px;
+            fill: var(--pink-accent);
+        }
+
+        /* Polaroids / Photos */
+        .polaroids-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .polaroid {
+            position: absolute;
+            background: #ffffff;
+            padding: 12px 12px 42px 12px;
+            border-radius: 4px;
+            box-shadow: 
+                0 15px 35px rgba(0,0,0,0.15),
+                0 3px 10px rgba(0,0,0,0.05);
+            opacity: 0;
+            width: 175px;
+            transition: transform 0.3s ease;
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: 165px;
+            object-fit: cover;
+            border-radius: 2px;
+        }
+
+        .polaroid .tag {
+            position: absolute;
+            bottom: 8px;
+            width: calc(100% - 24px);
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-weight: 600;
+            font-size: 1.6rem;
+            color: var(--pink-accent);
+        }
+
+        /* Smooth Keyframe Animations */
+        @keyframes popInOutSmooth {
+            0% {
+                opacity: 0;
+                transform: scale(0.6) translateY(30px);
+            }
+            20% {
+                opacity: 1;
+                transform: scale(1.05) translateY(0);
+            }
+            30% {
+                transform: scale(1) translateY(0);
+            }
+            75% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1.2) translateY(-20px);
+            }
+        }
+
+        @keyframes polaroidDropSmooth {
+            0% {
+                opacity: 0;
+                transform: scale(1.8) translateY(-80px) rotate(0deg);
+                filter: blur(8px);
+            }
+            60% {
+                opacity: 1;
+                filter: blur(0px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0) rotate(var(--rot));
+                filter: blur(0px);
+            }
+        }
+
+        @keyframes floatSlow {
+            0% { transform: translateY(0px) rotate(var(--rot)); }
+            50% { transform: translateY(-8px) rotate(calc(var(--rot) + 1deg)); }
+            100% { transform: translateY(0px) rotate(var(--rot)); }
+        }
+
+        /* Animation classes */
+        .anim-pop {
+            animation: popInOutSmooth 1.1s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+        }
+
+        .anim-polaroid {
+            animation: 
+                polaroidDropSmooth 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.2) forwards,
+                floatSlow 4s ease-in-out infinite 0.7s;
+        }
+
+        /* Positioning of Photos */
+        .p1 { top: 18%; left: 8%; --rot: -12deg; }
+        .p2 { top: 38%; right: 8%; --rot: 8deg; }
+        .p3 { top: 58%; left: 16%; --rot: -4deg; }
+
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" src="your-song-file.mp3" preload="auto"></audio>
+
+    <div class="reel-canvas">
+        <div class="glow-overlay"></div>
+
+        <button id="startBtn">Play Edit</button>
+
+        <div class="lyric-box" id="t1">
+            <div class="bubbly-text">what i was</div>
+        </div>
+
+        <div class="lyric-box" id="t2">
+            <div class="looking-container">
+                <div class="bubbly-text">looking</div>
+                <div class="eye-graphic">
+                    <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                </div>
+                <div class="bubbly-text">for</div>
+            </div>
+        </div>
+
+        <div class="lyric-box" id="t3">
+            <div class="bubbly-text">'til i</div>
+        </div>
+
+        <div class="lyric-box" id="t4">
+            <div class="bubbly-text">found</div>
+        </div>
+
+        <div class="polaroids-layer">
+            <div class="polaroid p1" id="p1">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80" alt="Her">
+                <div class="tag">Her</div>
+            </div>
+            <div class="polaroid p2" id="p2">
+                <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80" alt="Her">
+                <div class="tag">Her</div>
+            </div>
+            <div class="polaroid p3" id="p3">
+                <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80" alt="Her">
+                <div class="tag">Her</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('startBtn').addEventListener('click', function() {
+            this.style.opacity = '0';
+            setTimeout(() => this.style.display = 'none', 300);
+
+            const audio = document.getElementById('bgMusic');
+            if(audio.getAttribute('src') !== 'your-song-file.mp3') {
+                audio.currentTime = 0;
+                audio.play();
+            }
+
+            // Sync Timings for JVKE - "her"
+            const timeline = [
+                { id: 't1', time: 100 },   // "what i was"
+                { id: 't2', time: 1000 },  // "looking for"
+                { id: 't3', time: 1900 },  // "'til i"
+                { id: 't4', time: 2600 },  // "found"
+                { id: 'p1', time: 3300, isPhoto: true }, // Photo 1 drop
+                { id: 'p2', time: 3600, isPhoto: true }, // Photo 2 drop
+                { id: 'p3', time: 3900, isPhoto: true }  // Photo 3 drop
+            ];
+
+            timeline.forEach(item => {
+                setTimeout(() => {
+                    const el = document.getElementById(item.id);
+                    if (item.isPhoto) {
+                        el.classList.add('anim-polaroid');
+                    } else {
+                        el.classList.add('anim-pop');
+                    }
+                }, item.time);
+            });
+        });
+    </script>
+</body>
+</html>
