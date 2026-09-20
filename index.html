@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JVKE - Her Reel Animation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            background-color: #121212;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Fredoka', sans-serif;
+            overflow: hidden;
+        }
+
+        /* Mobile Reel Frame */
+        .reel-frame {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            max-width: 414px;
+            max-height: 896px;
+            background: #ffa8d2; /* Exact Reels Light Pink Background */
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Play Button */
+        #playBtn {
+            position: absolute;
+            z-index: 100;
+            padding: 14px 28px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            background: #ff2a75;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 42, 117, 0.4);
+            transition: transform 0.2s;
+        }
+
+        #playBtn:active {
+            transform: scale(0.95);
+        }
+
+        /* Common Lyrics Styling */
+        .lyric-stage {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* 1. Circle Outline Text "what i was" */
+        .circle-text-box {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            border: 4px solid #ff2a75;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .circle-text-box span {
+            font-size: 2.2rem;
+            color: #ff2a75;
+            text-align: center;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        /* 2. "Looking for" with Eyes & Sparkle */
+        .looking-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .looking-text {
+            font-size: 3rem;
+            color: white;
+            -webkit-text-stroke: 3px #ff2a75;
+            text-shadow: 0 5px 0 #ff2a75;
+            letter-spacing: 1px;
+        }
+
+        .eye-icon-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 2.5rem;
+        }
+
+        /* 3. "TILL" Text */
+        .till-text {
+            font-size: 4rem;
+            color: white;
+            -webkit-text-stroke: 4px #ff2a75;
+            text-shadow: 0 6px 0 #ff2a75;
+            letter-spacing: 2px;
+        }
+
+        /* 4. "Found" in Circle */
+        .found-box {
+            width: 200px;
+            height: 200px;
+            border: 4px solid #ff2a75;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: white;
+        }
+
+        .found-text {
+            font-size: 2.8rem;
+            color: #ff2a75;
+            font-weight: 700;
+        }
+
+        /* Polaroids Container */
+        .polaroids-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .polaroid {
+            position: absolute;
+            background: white;
+            padding: 10px 10px 38px 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            opacity: 0;
+            width: 160px;
+            border-radius: 3px;
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .polaroid .her-tag {
+            position: absolute;
+            bottom: 4px;
+            right: 15px;
+            font-family: 'Pacifico', cursive;
+            color: #ff2a75;
+            font-size: 1.5rem;
+        }
+
+        /* Animations */
+        @keyframes popOut {
+            0% { opacity: 0; transform: scale(0.6); }
+            20% { opacity: 1; transform: scale(1.05); }
+            80% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.2); }
+        }
+
+        @keyframes polaroidPop {
+            0% { opacity: 0; transform: scale(1.5) rotate(0deg); }
+            100% { opacity: 1; transform: scale(1) rotate(var(--angle)); }
+        }
+
+        .anim-lyric {
+            animation: popOut 1.0s ease-in-out forwards;
+        }
+
+        .anim-polaroid {
+            animation: polaroidPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* Polaroid Positions matching the video */
+        .p1 { top: 15%; left: 8%; --angle: -10deg; }
+        .p2 { top: 32%; right: 8%; --angle: 12deg; }
+        .p3 { top: 52%; left: 18%; --angle: -5deg; }
+
+    </style>
+</head>
+<body>
+
+    <!-- Audio file for JVKE - her -->
+    <audio id="jvkeSong" src="jvke-her.mp3" preload="auto"></audio>
+
+    <div class="reel-frame">
+        <button id="playBtn">Play Reel</button>
+
+        <!-- Lyric Frame 1: what i was -->
+        <div class="lyric-stage" id="stage1">
+            <div class="circle-text-box">
+                <span>what<br>i was</span>
+            </div>
+        </div>
+
+        <!-- Lyric Frame 2: Looking for -->
+        <div class="lyric-stage" id="stage2">
+            <div class="looking-box">
+                <div class="eye-icon-row">👁️ ✦ 👁️</div>
+                <div class="looking-text">Looking</div>
+                <div class="looking-text">for</div>
+            </div>
+        </div>
+
+        <!-- Lyric Frame 3: TILL -->
+        <div class="lyric-stage" id="stage3">
+            <div class="till-text">TILL</div>
+        </div>
+
+        <!-- Lyric Frame 4: Found -->
+        <div class="lyric-stage" id="stage4">
+            <div class="found-box">
+                <div class="found-text">Found</div>
+            </div>
+        </div>
+
+        <!-- Polaroids Overlay -->
+        <div class="polaroids-container">
+            <div class="polaroid p1" id="p1">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500" alt="Her 1">
+                <div class="her-tag">Her</div>
+            </div>
+            <div class="polaroid p2" id="p2">
+                <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500" alt="Her 2">
+                <div class="her-tag">Her</div>
+            </div>
+            <div class="polaroid p3" id="p3">
+                <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500" alt="Her 3">
+                <div class="her-tag">Her</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('playBtn').addEventListener('click', function() {
+            this.style.display = 'none';
+
+            const song = document.getElementById('jvkeSong');
+            if(song.getAttribute('src') !== 'jvke-her.mp3') {
+                song.play();
+            }
+
+            // Sync Timeline according to beat drop
+            const steps = [
+                { id: 'stage1', delay: 100 },  // "what i was"
+                { id: 'stage2', delay: 1100 }, // "Looking for"
+                { id: 'stage3', delay: 2100 }, // "TILL"
+                { id: 'stage4', delay: 3000 }, // "Found"
+                
+                // Beat drop - Photos pop up one by one
+                { id: 'p1', delay: 4000, isPhoto: true },
+                { id: 'p2', delay: 4300, isPhoto: true },
+                { id: 'p3', delay: 4600, isPhoto: true }
+            ];
+
+            steps.forEach(step => {
+                setTimeout(() => {
+                    const el = document.getElementById(step.id);
+                    if(step.isPhoto) {
+                        el.classList.add('anim-polaroid');
+                    } else {
+                        el.classList.add('anim-lyric');
+                    }
+                }, step.delay);
+            });
+        });
+    </script>
+</body>
+  </html>
+  
