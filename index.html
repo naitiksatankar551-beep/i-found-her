@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For My Tanushree ❤️</title>
+    <!-- Google Fonts for Handwritten Style -->
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #fce4ec;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            padding: 10px;
+        }
+
+        /* Mobile Container Frame */
+        .phone-container {
+            width: 100%;
+            max-width: 390px;
+            height: 844px;
+            max-height: 92vh;
+            background: #fff;
+            border-radius: 35px;
+            box-shadow: 0 20px 40px rgba(214, 52, 71, 0.15);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            border: 8px solid #fff;
+        }
+
+        /* Pages System */
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 30px 20px 80px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s ease-in-out;
+            transform: translateX(100%);
+            overflow-y: auto;
+        }
+
+        .page.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateX(0);
+        }
+
+        /* Headings & Text */
+        h1 {
+            color: #d81b60;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        h2 {
+            color: #ad1457;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Handwritten Letter Styling */
+        .letter-paper {
+            background: #fffdf0;
+            background-image: repeating-linear-gradient(#fffdf0 0px, #fffdf0 24px, #e1d5c9 25px);
+            border-radius: 12px;
+            padding: 25px 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            border-left: 3px solid #ff80ab;
+            text-align: left;
+            width: 100%;
+            font-family: 'Caveat', cursive;
+            font-size: 1.4rem;
+            line-height: 25px;
+            color: #2c3e50;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .letter-paper::before {
+            content: '💌';
+            position: absolute;
+            top: -15px;
+            right: 15px;
+            font-size: 1.8rem;
+        }
+
+        /* Floating Hearts Animation */
+        .heart-float {
+            font-size: 3.5rem;
+            animation: float 2.5s ease-in-out infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-12px) scale(1.08); }
+        }
+
+        /* Buttons & Navigation */
+        .btn-main {
+            background: linear-gradient(135deg, #ff4081, #d81b60);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(216, 27, 96, 0.3);
+            transition: transform 0.2s;
+            margin-top: 15px;
+        }
+
+        .btn-main:active {
+            transform: scale(0.95);
+        }
+
+        /* Interactive Choice Buttons on Final Page */
+        .choice-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            margin-top: 20px;
+            position: relative;
+            min-height: 160px;
+        }
+
+        .btn-yes {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(46, 125, 50, 0.3);
+            width: 80%;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .btn-no {
+            background: #e0e0e0;
+            color: #555;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+            z-index: 1;
+        }
+
+        /* Pagination Dots */
+        .dots-indicator {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #ffd5e5;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            width: 24px;
+            background: #d81b60;
+            border-radius: 10px;
+        }
+
+        /* Confetti Canvas */
+        #confettiCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 99;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone-container">
+        <canvas id="confettiCanvas"></canvas>
+
+        <!-- PAGE 1: Welcome -->
+        <div class="page active" id="page1">
+            <div class="heart-float">🥺❤️</div>
+            <h1>Hey Tanushree...</h1>
+            <p>I built this tiny space just for you because my heart couldn't rest until I talked to you properly.</p>
+            <br>
+            <p>Can you spare a minute to read this?</p>
+            <button class="btn-main" onclick="nextPage(2)">Open Letter 💌</button>
+        </div>
+
+        <!-- PAGE 2: Written Letter Style -->
+        <div class="page" id="page2">
+            <h2>A Letter From My Heart</h2>
+            <div class="letter-paper">
+                Dearest Tanushree,<br><br>
+                I am so deeply sorry for hurting you. Seeing you sad or upset because of me breaks my heart into a million pieces.<br><br>
+                You mean everything to me—your smile, your warmth, and your peace. I promise to listen better, be more understanding, and never take you for granted.<br><br>
+                Forever yours, ❤️
+            </div>
+            <button class="btn-main" onclick="nextPage(3)">Next ➔</button>
+        </div>
+
+        <!-- PAGE 3: Why You Mean So Much -->
+        <div class="page" id="page3">
+            <div style="font-size: 3rem; margin-bottom: 10px;">🌸✨</div>
+            <h2>Why You are Special</h2>
+            <div style="text-align: left; background: #fff0f5; padding: 18px; border-radius: 15px; margin: 15px 0;">
+                <p style="margin-bottom: 10px;">💖 <strong>Your Kindness:</strong> You bring light and warmth into my life every day.</p>
+                <p style="margin-bottom: 10px;">🌟 <strong>Our Bond:</strong> Every moment with you, Tanushree, is something I treasure deeply.</p>
+                <p>🤝 <strong>My Promise:</strong> I am constantly striving to be a better person for you.</p>
+            </div>
+            <button class="btn-main" onclick="nextPage(4)">One Last Question 🥺</button>
+        </div>
+
+        <!-- PAGE 4: The Playful Question -->
+        <div class="page" id="page4">
+            <div class="heart-float" id="questionEmoji">👉👈</div>
+            <h1 id="questionTitle">Tanushree, will you forgive me?</h1>
+            <p id="playfulSubtext">Please say yes... my heart is waiting! 💗</p>
+
+            <div class="choice-container">
+                <button class="btn-yes" id="yesBtn" onclick="forgiven()">Yes, I Forgive You! ❤️</button>
+                <button class="btn-no" id="noBtn" onclick="playfulNo()" onmouseover="playfulNo()">No 😤</button>
+            </div>
+        </div>
+
+        <!-- PAGE 5: Celebration / Success -->
+        <div class="page" id="page5">
+            <div style="font-size: 4.5rem; animation: float 2s infinite;">🥰🎉</div>
+            <h1>THANK YOU, TANUSHREE!</h1>
+            <p style="font-size: 1.1rem; color: #d81b60; font-weight: 600; margin-top: 10px;">
+                I promise to make you smile every single day!
+            </p>
+            <div class="letter-paper" style="text-align: center; font-size: 1.6rem; margin-top: 20px;">
+                Sending you the biggest hug right now! 🫂❤️
+            </div>
+        </div>
+
+        <!-- Navigation Dots -->
+        <div class="dots-indicator">
+            <div class="dot active" id="dot1"></div>
+            <div class="dot" id="dot2"></div>
+            <div class="dot" id="dot3"></div>
+            <div class="dot" id="dot4"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        let noCount = 0;
+
+        const playfulResponses = [
+            "Are you sure, Tanushree? 🥺",
+            "Think again please! 💔",
+            "What if I buy you your favorite food? 🍕",
+            "Don't do this to me! 😭",
+            "Look at the YES button... it's getting bigger!",
+            "You can't click NO forever! 😂",
+            "Okay, last chance... say YES! ❤️"
+        ];
+
+        function nextPage(pageNum) {
+            document.getElementById(`page${currentPage}`).classList.remove('active');
+            document.getElementById(`dot${currentPage}`)?.classList.remove('active');
+            
+            currentPage = pageNum;
+            
+            document.getElementById(`page${currentPage}`).classList.add('active');
+            if (document.getElementById(`dot${currentPage}`)) {
+                document.getElementById(`dot${currentPage}`).classList.add('active');
+            }
+        }
+
+        // Playful No Button Logic
+        function playfulNo() {
+            noCount++;
+            const noBtn = document.getElementById('noBtn');
+            const yesBtn = document.getElementById('yesBtn');
+            const subtext = document.getElementById('playfulSubtext');
+
+            // 1. Change text playfully
+            if (noCount <= playfulResponses.length) {
+                subtext.innerText = playfulResponses[noCount - 1];
+            } else {
+                subtext.innerText = "Just click YES already, Tanushree! 🥰";
+            }
+
+            // 2. Make "YES" button grow bigger every time "NO" is tapped
+            const currentYesSize = 1.1 + (noCount * 0.15);
+            const currentPadding = 15 + (noCount * 4);
+            yesBtn.style.transform = `scale(${Math.min(currentYesSize, 1.8)})`;
+            yesBtn.style.padding = `${currentPadding}px ${currentPadding * 2}px`;
+
+            // 3. Teleport/Move the "NO" button randomly inside the frame
+            const container = document.querySelector('.choice-container');
+            const randomX = (Math.random() - 0.5) * 180;
+            const randomY = (Math.random() - 0.5) * 120;
+            noBtn.style.transform = `translate(${randomX}px, ${randomY}px) scale(${Math.max(0.6, 1 - noCount * 0.08)})`;
+        }
+
+        // Forgiveness Trigger
+        function forgiven() {
+            nextPage(5);
+            document.querySelector('.dots-indicator').style.display = 'none';
+            startConfetti();
+        }
+
+        // Simple Confetti FX
+        function startConfetti() {
+            const canvas = document.getElementById('confettiCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+
+            const pieces = [];
+            const colors = ['#ff4081', '#d81b60', '#ff80ab', '#ffeb3b', '#4caf50'];
+
+            for (let i = 0; i < 80; i++) {
+                pieces.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    size: Math.random() * 8 + 4,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    speed: Math.random() * 3 + 2,
+                    rotation: Math.random() * 360
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                pieces.forEach(p => {
+                    p.y += p.speed;
+                    p.rotation += 2;
+                    ctx.save();
+                    ctx.fillStyle = p.color;
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate((p.rotation * Math.PI) / 180);
+                    ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                    ctx.restore();
+
+                    if (p.y > canvas.height) p.y = -10;
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+    </script>
+</body>
+  </html>
+  
